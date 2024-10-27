@@ -43,3 +43,16 @@ occurrences <- final_df %>% count(skill)
 occurrences %>% arrange(desc(n))
 ```
 
+```{r}
+df_occur <- occurrences %>% arrange(desc(n))
+df_occur2 <- df_occur[1:15,]
+```
+
+```{r}
+ggplot(df_occur2, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="Lightblue") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Top 15)") +
+   ylab("Frequency from Job Postings") + xlab("Data Science Skills")
+```
+
