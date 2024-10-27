@@ -1,0 +1,45 @@
+---
+title: "Untitled"
+author: ""
+date: "2024-10-26"
+output: html_document
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(stringr)
+```
+
+
+```{r}
+df <- read.csv("https://raw.githubusercontent.com/Andreina-A/Project-3/refs/heads/main/Data_merged.csv")
+head(df)
+```
+
+
+```{r}
+df1 <- data.frame(str_split_fixed(df$job_skills, ",", 150))
+head(df1)
+```
+
+
+```{r}
+df2 <- cbind(df$job_link, df$job_title, df1)
+names(df2)[names(df2) == "df$job_link"] <- "job_link"
+names(df2)[names(df2) == "df$job_title"] <- "job_title"
+head(df2)
+```
+
+
+```{r}
+final_df <- pivot_longer(df2, cols = starts_with("X"), names_to = "number", values_to = "skill")
+final_df[final_df == ""] <- NA
+final_df <- subset(final_df,!is.na(skill))
+```
+
+
+```{r}
+occurrences <- final_df %>% count(skill)
+occurrences %>% arrange(desc(n))
+```
+
