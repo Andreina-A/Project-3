@@ -1,0 +1,29 @@
+---
+title: "Data_Merge"
+author: "Andreina A"
+date: "2024-10-27"
+output: html_document
+---
+To analysis the data scientist skils need were used a data frame on job posting from kaggle. The data set for job postings and job skills were in seperate csv file which needed to be merged for the purpose of our project.
+
+Data source: https://www.kaggle.com/datasets/asaniczka/data-science-job-postings-and-skills?select=job_postings.csv
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+```
+
+```{r}
+Path= read.csv('~/Downloads/job_postings.csv')
+Path2= read.csv('~/Downloads/job_skills.csv')
+```
+
+
+```{r}
+Data_merged = merge(Path,Path2)
+```
+
+```{r}
+write.csv(Data_merged,"Data_merged.csv")
+```
+
+The csv file has been created to uploaded to github for further analysis for our project on data scientist skills.
