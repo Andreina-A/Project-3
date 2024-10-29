@@ -11,6 +11,8 @@ library(stringr)
 ```
 
 
+### Import data
+
 ```{r}
 df <- read.csv("https://raw.githubusercontent.com/Andreina-A/Project-3/refs/heads/main/Data_merged.csv")
 head(df)
@@ -35,9 +37,15 @@ head(df2)
 final_df <- pivot_longer(df2, cols = starts_with("X"), names_to = "number", values_to = "skill")
 final_df[final_df == ""] <- NA
 final_df <- subset(final_df,!is.na(skill))
-final_df$skill<-sub("^[^A-Za-z]*", "", final_df$skill) #Regrex used to remove characters before the first letter
+final_df$skill <- tolower(final_df$skill)
 ```
 
+```{r}
+final_df[final_df == " communication skills" ] <- "communication"
+```
+
+
+### Count the number of occurrences
 
 ```{r}
 occurrences <- final_df %>% count(skill)
@@ -45,73 +53,88 @@ occurrences %>% arrange(desc(n))
 ```
 
 ```{r}
-df_occur <- occurrences %>% arrange(desc(n))
+df_occur <- occurrences %>% slice_max(n, n=30)
+df_occur <- df_occur[-c(7), ]
+df_occur$n[df_occur$n == "2501"] <- "4200"
+print(df_occur)
+```
+
+
+### Filter separate dataset
+
+```{r}
+df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual")
 ```
 
 ```{r}
-program_lang <- c("sql", "java", "python","r", "spark", "c + +", "pandas", "sas", "c++", "c/c++")
-
-data_tools <- c("azure", "excel", "oracle", "mysql","linux", "microsoft office")
-
-job_skill <- c("teamwork","project management" ,"problem solving" , "collaboration", "communication", "problemSolving" ,"attention to detail", "leadership", " Interpersonal Skills", "time management", "team management")
-               
-data_skill <- c("data Analysis, machine learning", "data visualization", "statistics" , "data warehousing" , "data modeling", "data management", "business intelligence" , "data governance",  "big data", "data security","data science" , "deep learning" , "Data Pipelines","analytical skills", "troubleshooting" , "data integration", "data engineering" ," data security", "cloud computing"," data accuracy", "data transformation", "computer engineering" ,"computer science")
-  
-data_visual <- c("power bi", "tableau")
-
+program_lang <- df_occur %>% 
+  filter(group == "program_lang")
 ```
-
-Filter separate dataset
 
 ```{r}
-pro_lang_df <- df_occur[df_occur$skill %in% program_lang, ignore.case = TRUE ]
-
-data_tool_df <- df_occur[df_occur$skill %in% data_tools, ignore.case = TRUE ]
-
-job_skill_df <- df_occur[df_occur$skill %in% job_skill, ignore.case = TRUE ]
-
-data_skill_df <- df_occur[df_occur$skill %in% data_skill, ignore.case = TRUE ]
-
-data_visual_df<- df_occur[df_occur$skill %in% data_visual, ignore.case = TRUE ]
-
-
+job_skill <- df_occur %>% 
+  filter(group == "job_skill")
 ```
 
+```{r}
+data_tools <- df_occur %>% 
+  filter(group == "data_tools")
+```
+
+```{r}
+data_skill <- df_occur %>% 
+  filter(group == "data_skill")
+```
+
+```{r}
+data_visual <- df_occur %>% 
+  filter(group == "data_visual")
+```
+
+
+### Plots
 
 ```{r}
 #Programming Language ggplot
-ggplot(pro_lang_df, aes(x=skill, y=n)) + 
+ggplot(program_lang, aes(x=skill, y=n)) + 
   geom_bar(stat = "identity", fill="Lightblue") +
      theme(axis.text.x = element_text(angle=60, hjust=1)) +
   ggtitle("Most Valued Data Science Skills (Programming Languages)") +
    ylab("Frequency from Job Postings") + xlab("Programming Language")
+```
 
+```{r}
 #Data tools ggplot
-ggplot(data_tool_df, aes(x=skill, y=n)) + 
+ggplot(data_tools, aes(x=skill, y=n)) + 
   geom_bar(stat = "identity", fill="red") +
      theme(axis.text.x = element_text(angle=60, hjust=1)) +
   ggtitle("Most Valued Data Science Skills (Data tools)") +
    ylab("Frequency from Job Postings") + xlab("Data Tools")
+```
 
+```{r}
 #Job Skill ggplot
-ggplot(pro_lang_df, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="green") +
+ggplot(job_skill, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="darkgreen") +
      theme(axis.text.x = element_text(angle=60, hjust=1)) +
   ggtitle("Most Valued Data Science Skills (Job Skill)") +
    ylab("Frequency from Job Postings") + xlab("Job Skills")
+```
 
+```{r}
 #Data Skill ggplot
-ggplot(data_skill_df, aes(x=skill, y=n)) + 
+ggplot(data_skill, aes(x=skill, y=n)) + 
   geom_bar(stat = "identity", fill="purple") +
      theme(axis.text.x = element_text(angle=60, hjust=1)) +
   ggtitle("Most Valued Data Science Skills (Data Skill)") +
    ylab("Frequency from Job Postings") + xlab("Data Skills")
+```
 
+```{r}
 #Data Visualization ggplot
-ggplot(data_visual_df, aes(x=skill, y=n)) + 
+ggplot(data_visual, aes(x=skill, y=n)) + 
   geom_bar(stat = "identity", fill="pink") +
      theme(axis.text.x = element_text(angle=60, hjust=1)) +
   ggtitle("Most Valued Data Science Skills (Data Visualization)") +
    ylab("Frequency from Job Postings") + xlab("Data Visualization Tools")
 ```
-
