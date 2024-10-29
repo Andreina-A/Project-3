@@ -35,6 +35,7 @@ head(df2)
 final_df <- pivot_longer(df2, cols = starts_with("X"), names_to = "number", values_to = "skill")
 final_df[final_df == ""] <- NA
 final_df <- subset(final_df,!is.na(skill))
+final_df$skill<-sub("^[^A-Za-z]*", "", final_df$skill) #Regrex used to remove characters before the first letter
 ```
 
 
