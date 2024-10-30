@@ -40,10 +40,6 @@ final_df <- subset(final_df,!is.na(skill))
 final_df$skill <- tolower(final_df$skill)
 ```
 
-```{r}
-final_df[final_df == " communication skills" ] <- "communication"
-```
-
 
 ### Count the number of occurrences
 
@@ -53,9 +49,10 @@ occurrences %>% arrange(desc(n))
 ```
 
 ```{r}
-df_occur <- occurrences %>% slice_max(n, n=31)
-df_occur <- df_occur[-c(7), ]
+df_occur <- occurrences %>% slice_max(n, n=33)
+df_occur <- df_occur[-c(7, 18, 25), ]
 df_occur$n[df_occur$n == "2501"] <- "4200"
+df_occur$n[df_occur$n == "2359"] <- "4639"
 print(df_occur)
 ```
 
@@ -63,7 +60,7 @@ print(df_occur)
 ### Filter separate dataset
 
 ```{r}
-df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual", "data_skill")
+df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual", "data_skill", "data_skill", "data_skill")
 ```
 
 ```{r}
