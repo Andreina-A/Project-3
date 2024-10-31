@@ -1,0 +1,121 @@
+---
+title: "Most Valued Data Science Skills"
+author: "Andreina Arias, Jiaxin Zheng, Leslie Tavarez, Nakesha Fray, and Yanyi Li"
+date: "2024-10-31"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+
+### Import data
+
+```{r}
+df <- read.csv("https://raw.githubusercontent.com/Andreina-A/Project-3/refs/heads/main/Data_merged.csv")
+head(df)
+```
+
+
+```{r}
+df1 <- data.frame(str_split_fixed(df$job_skills, ",", 150))
+head(df1)
+```
+
+
+```{r}
+df2 <- cbind(df$job_link, df$job_title, df1)
+names(df2)[names(df2) == "df$job_link"] <- "job_link"
+names(df2)[names(df2) == "df$job_title"] <- "job_title"
+head(df2)
+```
+
+
+```{r}
+final_df <- pivot_longer(df2, cols = starts_with("X"), names_to = "number", values_to = "skill")
+final_df[final_df == ""] <- NA
+final_df <- subset(final_df,!is.na(skill))
+final_df$skill <- tolower(final_df$skill)
+```
+
+
+### Count the number of occurrences
+
+```{r}
+occurrences <- final_df %>% count(skill)
+occurrences %>% arrange(desc(n))
+```
+
+```{r}
+df_occur <- occurrences %>% slice_max(n, n=33)
+df_occur <- df_occur[-c(7, 18, 25), ]
+df_occur$n[df_occur$n == "2501"] <- "4200"
+df_occur$n[df_occur$n == "2359"] <- "4639"
+print(df_occur)
+```
+
+
+### Filter separate dataset
+
+```{r}
+df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual", "data_skill", "data_skill", "data_skill")
+```
+
+```{r}
+split_data <- df_occur %>%
+  group_by(group) %>%
+  group_split()
+```
+
+
+### Plots
+```{r}
+#Programming Language ggplot
+ggplot(program_lang, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="Lightblue") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Programming Languages)") +
+   ylab("Frequency from Job Postings") + xlab("Programming Language")
+```
+```{r}
+#Data tools ggplot
+ggplot(data_tools, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="red") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Data tools)") +
+   ylab("Frequency from Job Postings") + xlab("Data Tools")
+```
+
+```{r}
+#Job Skill ggplot
+ggplot(job_skill, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="darkgreen") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Job Skill)") +
+   ylab("Frequency from Job Postings") + xlab("Job Skills")
+```
+
+```{r}
+#Data Skill ggplot
+ggplot(data_skill, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="purple") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Data Skill)") +
+   ylab("Frequency from Job Postings") + xlab("Data Skills")
+```
+
+```{r}
+#Data Visualization ggplot
+ggplot(data_visual, aes(x=skill, y=n)) + 
+  geom_bar(stat = "identity", fill="pink") +
+     theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  ggtitle("Most Valued Data Science Skills (Data Visualization)") +
+   ylab("Frequency from Job Postings") + xlab("Data Visualization Tools")
+```
+
+
