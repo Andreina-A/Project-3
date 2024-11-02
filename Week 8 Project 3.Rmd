@@ -63,75 +63,13 @@ print(df_occur)
 df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual", "data_skill", "data_skill", "data_skill")
 ```
 
-```{r}
-program_lang <- df_occur %>% 
-  filter(group == "program_lang")
-```
-
-```{r}
-job_skill <- df_occur %>% 
-  filter(group == "job_skill")
-```
-
-```{r}
-data_tools <- df_occur %>% 
-  filter(group == "data_tools")
-```
-
-```{r}
-data_skill <- df_occur %>% 
-  filter(group == "data_skill")
-```
-
-```{r}
-data_visual <- df_occur %>% 
-  filter(group == "data_visual")
-```
-
-
 ### Plots
 
 ```{r}
-#Programming Language ggplot
-ggplot(program_lang, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="Lightblue") +
-     theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  ggtitle("Most Valued Data Science Skills (Programming Languages)") +
-   ylab("Frequency from Job Postings") + xlab("Programming Language")
-```
-
-```{r}
-#Data tools ggplot
-ggplot(data_tools, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="red") +
-     theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  ggtitle("Most Valued Data Science Skills (Data tools)") +
-   ylab("Frequency from Job Postings") + xlab("Data Tools")
-```
-
-```{r}
-#Job Skill ggplot
-ggplot(job_skill, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="darkgreen") +
-     theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  ggtitle("Most Valued Data Science Skills (Job Skill)") +
-   ylab("Frequency from Job Postings") + xlab("Job Skills")
-```
-
-```{r}
-#Data Skill ggplot
-ggplot(data_skill, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="purple") +
-     theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  ggtitle("Most Valued Data Science Skills (Data Skill)") +
-   ylab("Frequency from Job Postings") + xlab("Data Skills")
-```
-
-```{r}
-#Data Visualization ggplot
-ggplot(data_visual, aes(x=skill, y=n)) + 
-  geom_bar(stat = "identity", fill="pink") +
-     theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  ggtitle("Most Valued Data Science Skills (Data Visualization)") +
-   ylab("Frequency from Job Postings") + xlab("Data Visualization Tools")
+ggplot(df_occur, aes(x=skill, y=n))+
+  geom_bar(stat='identity', fill = "forestgreen")+
+  ggtitle("Most Valued Data Science Skills") +
+   ylab("Frequency from Job Postings") + xlab("Skills")
+       theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  facet_wrap(~group, scale="free")
 ```
