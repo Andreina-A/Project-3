@@ -69,7 +69,7 @@ df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "
 ggplot(df_occur, aes(x=skill, y=n))+
   geom_bar(stat='identity', fill = "forestgreen")+
   ggtitle("Most Valued Data Science Skills") +
-   ylab("Frequency from Job Postings") + xlab("Skills")
+   ylab("Frequency from Job Postings") + xlab("Skills")+
        theme(axis.text.x = element_text(angle=60, hjust=1)) +
   facet_wrap(~group, scale="free")
 ```
