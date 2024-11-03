@@ -80,6 +80,6 @@ ggplot(df_occur, aes(x=skill, y=n))+
   facet_wrap(~group, scale="free")
 ```
 
-##Conclusion
+## Conclusion
 
-Overall findings: Jobs looked for data scientist with skills in data skills(Statistics, business intelligence, data analysis, machine learning, and data warehousing), data tools(AWS,spark, hadoop, and snowflake), data visualization (data visualization, tableau, data modeling, and power bi), job skills (communication, project management, problem solving , teamwork, and attention to detail), and programming languages (Python, SQL, R, and Java). The programming language came a little to surprise as python had higher mention than r, when r is heavily used for data analyst and python is more for computer programming skills.
+**Overall findings: Jobs looked for data scientist with skills in data skills(Statistics, business intelligence, data analysis, machine learning, and data warehousing), data tools(AWS,spark, hadoop, and snowflake), data visualization (data visualization, tableau, data modeling, and power bi), job skills (communication, project management, problem solving , teamwork, and attention to detail), and programming languages (Python, SQL, R, and Java). The programming language came a little to surprise as python had higher mention than r, when r is heavily used for data analyst and python is more for computer programming skills.**
