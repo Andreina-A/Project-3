@@ -10,7 +10,7 @@ For this assisgnment we were asked to use data to answer this question, “Which
 Data from Kaggel "Data Science Job Postings & Skills (2024)" :https://www.kaggle.com/datasets/asaniczka/data-science-job-postings-and-skills?select=job_postings.csv Kaggle data Liscensure Open Data Commons Attribution License (ODC-By) v1.0: https://opendatacommons.org/licenses/by/1-0/index.html
 We found a dataset for data science job postings on Kaggel, which we used to find job skills that were mentioned the most to find the most valued skill for data science skills.
 
-## Load in libraries
+### Load in libraries
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(stringr)
@@ -18,19 +18,19 @@ library(stringr)
 
 
 ### Import data
-
 ```{r}
 df <- read.csv("https://raw.githubusercontent.com/Andreina-A/Project-3/refs/heads/main/Data_merged.csv")
 head(df)
 ```
 
-
+### Tidy Data
+We used str_split_fixed to pull out individual job skills seperated by commas for each job posting.
 ```{r}
 df1 <- data.frame(str_split_fixed(df$job_skills, ",", 150))
 head(df1)
 ```
 
-
+We then combined the job links and job title into one dataset with the original dataset, and renamed the variables.
 ```{r}
 df2 <- cbind(df$job_link, df$job_title, df1)
 names(df2)[names(df2) == "df$job_link"] <- "job_link"
@@ -38,7 +38,7 @@ names(df2)[names(df2) == "df$job_title"] <- "job_title"
 head(df2)
 ```
 
-
+This code chunk pivots the jon skills longer into one variable, then removes NAs and changes all skills to lowercase to ensure all similar skills are counted together.
 ```{r}
 final_df <- pivot_longer(df2, cols = starts_with("X"), names_to = "number", values_to = "skill")
 final_df[final_df == ""] <- NA
@@ -46,14 +46,15 @@ final_df <- subset(final_df,!is.na(skill))
 final_df$skill <- tolower(final_df$skill)
 ```
 
-
 ### Count the number of occurrences
 
+We then counted the number of occurrences for each skill and arranged the count from largest to smallest to pull out the most valued data skills.
 ```{r}
 occurrences <- final_df %>% count(skill)
 occurrences %>% arrange(desc(n))
 ```
 
+We took the first 30 obervations.
 ```{r}
 df_occur <- occurrences %>% slice_max(n, n=33)
 df_occur <- df_occur[-c(7, 18, 25), ]
@@ -64,12 +65,13 @@ print(df_occur)
 
 
 ### Filter separate dataset
-
+We created a variable called group which labels the the skill type for each of the 30 observations.
 ```{r}
 df_occur$group <- c("program_lang", "program_lang", "job_skill", "data_skill", "data_visual", "data_skill", "data_visual", "data_tools", "job_skill", "program_lang", "data_visual", "job_skill", "data_tools", "data_skill", "program_lang", "job_skill", "data_skill", "data_skill", "data_skill", "data_skill", "job_skill", "job_skill", "data_tools", "data_skill", "data_skill", "data_tools", "data_visual", "data_skill", "data_skill", "data_skill")
 ```
 
 ### Plots
+We did a ggplot of all the difference job skills in a facet_wrap
 
 ```{r}
 ggplot(df_occur, aes(x=skill, y=n))+
@@ -82,4 +84,4 @@ ggplot(df_occur, aes(x=skill, y=n))+
 
 ## Conclusion
 
-**Overall findings: Jobs looked for data scientist with skills in data skills(Statistics, business intelligence, data analysis, machine learning, and data warehousing), data tools(AWS,spark, hadoop, and snowflake), data visualization (data visualization, tableau, data modeling, and power bi), job skills (communication, project management, problem solving , teamwork, and attention to detail), and programming languages (Python, SQL, R, and Java). The programming language came a little to surprise as python had higher mention than r, when r is heavily used for data analyst and python is more for computer programming skills.**
+**Overall findings: Jobs looked for data scientist with skills in data skills(Statistics, business intelligence, data analysis, machine learning, and data warehousing), data tools(AWS,spark, hadoop, and snowflake), data visualization (data visualization, tableau, data modeling, and power bi), job skills (communication, project management, problem solving , teamwork, and attention to detail), and programming languages (Python, SQL, R, and Java). The programming language came a little to surprise as python had higher mention than r, when r is heavily used for data analyst and python is more for computer programming skills. In the future, we would look at which job titles value certain job types and how salaries vary with each skill and job title.**
